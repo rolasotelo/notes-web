@@ -1,11 +1,11 @@
 import os
 
-from flask import Flask
+from flask import Flask, render_template
 from flask_migrate import Migrate
 
 
 def create_app(test_config=None):
-    app = Flask(__name__)
+    app = Flask(__name__, template_folder='../templates', static_folder='../static')
     app.config.from_mapping(
         SECRET_KEY=os.environ.get('SECRET_KEY', default='dev')
     )
@@ -19,5 +19,9 @@ def create_app(test_config=None):
 
     db.init_app(app)
     migrate = Migrate(app,db)
+
+    @app.route('/sign-up')
+    def sign_up():
+        return render_template('sign_up.html')
 
     return app
